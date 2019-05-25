@@ -32,6 +32,17 @@ public class ServerBackground {
 			System.out.println("클라이언트 : " + msg);
 			gui.appendMsg(msg);
 
+			new Thread(() -> {
+				String cmsg;
+				while (in != null) {// 요청을 리시브하는 기능
+					try {
+						cmsg = in.readUTF();
+						gui.appendMsg(cmsg);
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
+				}
+			}).start();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -40,6 +51,15 @@ public class ServerBackground {
 	public static void main(String[] args) {
 		ServerBackground serverBackground = new ServerBackground();
 		serverBackground.setting();
+	}
+
+	public void sendMessage(String msg) {
+		try {
+			out.writeUTF(msg);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
 	}
 
 }

@@ -18,6 +18,7 @@ public class ClientGUI extends JFrame{
 		jtf.addActionListener(e->{
 			String msg = jtf.getText()+"\n";
 			jta.append(msg);
+			client.sendMessage(msg);
 			jtf.setText("");
 		});//이벤트 리스너
 		
@@ -31,5 +32,9 @@ public class ClientGUI extends JFrame{
 	
 	public static void main(String[] args) {
 		new ClientGUI();
+	}
+
+	public void appendMsg(String msg) {
+		jta.append(msg);
 	}
 }

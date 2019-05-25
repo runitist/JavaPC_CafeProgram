@@ -20,6 +20,7 @@ public class ServerGUI  extends JFrame{
 		jtf.addActionListener(e->{
 			String msg = jtf.getText()+"\n";
 			jta.append(msg);
+			server.sendMessage(msg);
 			jtf.setText("");
 		});//이벤트 리스너
 		

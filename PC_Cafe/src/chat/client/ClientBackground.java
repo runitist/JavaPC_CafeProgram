@@ -2,6 +2,7 @@ package chat.client;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
+import java.io.IOException;
 import java.net.Socket;
 
 public class ClientBackground {
@@ -25,7 +26,18 @@ public class ClientBackground {
 			out = new DataOutputStream(socket.getOutputStream());// 리퀘스트
 			in = new DataInputStream(socket.getInputStream());// 리스폰스
 
-			out.writeUTF("안녕하세요. 클라이언트입니다.");
+			out.writeUTF("안녕하세요. 클라이언트입니다.\n");
+			new Thread(() -> {
+				String msg;
+				while (in != null) {// 요청을 리시브하는 기능
+					try {
+						msg = in.readUTF();
+						gui.appendMsg(msg);
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
+				}
+			}).start();
 
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -35,6 +47,15 @@ public class ClientBackground {
 	public static void main(String[] args) {
 		ClientBackground clientBackground = new ClientBackground();
 		clientBackground.connect();
+	}
+
+	public void sendMessage(String msg) {
+		try {
+			out.writeUTF(msg);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
 	}
 
 }
